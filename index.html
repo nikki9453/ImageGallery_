@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ImageGallery_BYTE - A modern, responsive premium photography gallery with filtering, search, and accessible lightbox.">
+  <title>ImageGallery_BYTE | Premium Photography Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Hero -->
+  <header class="gallery-header">
+    <div class="header-container">
+      <div class="badge">Curated Collection</div>
+      <h1 class="gallery-title">ImageGallery_<span>BYTE</span></h1>
+      <p class="gallery-subtitle">Immerse yourself in breathtaking captures across Nature, Travel, Architecture, and Wildlife.</p>
+    </div>
+  </header>
+
+  <!-- Control Bar: Search & Category Filters -->
+  <main class="gallery-wrapper">
+    <section class="controls-section" aria-label="Gallery Controls">
+      <div class="search-box">
+        <label for="search-input" class="sr-only">Search images</label>
+        <span class="search-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input 
+          type="search" 
+          id="search-input" 
+          placeholder="Search by title, location or tag..." 
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button id="clear-search-btn" class="clear-search-btn" aria-label="Clear search" title="Clear search" hidden>
+          &times;
+        </button>
+      </div>
+
+      <nav class="filter-categories" aria-label="Category Filters">
+        <button class="filter-btn active" data-category="all" aria-pressed="true">
+          <span>All</span>
+          <span class="count-pill" id="count-all">0</span>
+        </button>
+        <button class="filter-btn" data-category="nature" aria-pressed="false">
+          <span>Nature</span>
+          <span class="count-pill" id="count-nature">0</span>
+        </button>
+        <button class="filter-btn" data-category="travel" aria-pressed="false">
+          <span>Travel</span>
+          <span class="count-pill" id="count-travel">0</span>
+        </button>
+        <button class="filter-btn" data-category="architecture" aria-pressed="false">
+          <span>Architecture</span>
+          <span class="count-pill" id="count-architecture">0</span>
+        </button>
+        <button class="filter-btn" data-category="wildlife" aria-pressed="false">
+          <span>Wildlife</span>
+          <span class="count-pill" id="count-wildlife">0</span>
+        </button>
+      </nav>
+    </section>
+
+    <!-- Gallery Status / Results Summary -->
+    <div class="results-summary" id="results-summary" aria-live="polite">
+      Showing <span id="visible-count">0</span> photos
+    </div>
+
+    <!-- Gallery Grid -->
+    <section class="gallery-grid" id="gallery-grid" aria-label="Photo Gallery">
+      <!-- Cards dynamically generated or hydrated by JavaScript -->
+    </section>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="empty-state" hidden role="region" aria-live="polite">
+      <div class="empty-state-icon" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <line x1="8" y1="11" x2="14" y2="11"></line>
+        </svg>
+      </div>
+      <h2>No photographs found</h2>
+      <p>We couldn't find any images matching your current query or category filter. Try refining your keywords or reset filters.</p>
+      <button id="reset-filter-btn" class="reset-btn">Reset All Filters</button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="gallery-footer">
+    <div class="footer-content">
+      <p>&copy; 2026 <strong>ImageGallery_BYTE</strong>. High-resolution imagery curated from Unsplash.</p>
+      <p class="footer-subtext">Crafted with pure HTML5, CSS3, &amp; Vanilla JavaScript. Responsive, smooth, and accessible.</p>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal -->
+  <dialog id="lightbox-modal" class="lightbox-dialog" aria-label="Photo Lightbox" aria-modal="true">
+    <div class="lightbox-overlay" id="lightbox-backdrop">
+      <!-- Lightbox Header Controls -->
+      <div class="lightbox-topbar">
+        <div class="lightbox-counter" id="lightbox-counter" aria-live="polite">1 of 12</div>
+        <div class="lightbox-actions">
+          <button id="lightbox-close-btn" class="lightbox-btn close-btn" aria-label="Close Lightbox (Esc)" title="Close (Esc)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Stage with Nav Buttons & Image Container -->
+      <div class="lightbox-stage">
+        <button id="lightbox-prev-btn" class="lightbox-btn nav-btn prev-btn" aria-label="Previous image (Left arrow)" title="Previous (Left Arrow)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <div class="lightbox-media-wrapper" id="lightbox-media-wrapper">
+          <div class="lightbox-loader" id="lightbox-loader" aria-hidden="true">
+            <span class="spinner"></span>
+          </div>
+          <img 
+            id="lightbox-img" 
+            class="lightbox-img" 
+            src="" 
+            alt=""
+          >
+          <div class="lightbox-error" id="lightbox-error" hidden>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <p>Failed to load image preview.</p>
+          </div>
+        </div>
+
+        <button id="lightbox-next-btn" class="lightbox-btn nav-btn next-btn" aria-label="Next image (Right arrow)" title="Next (Right Arrow)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Lightbox Caption & Details Footer -->
+      <div class="lightbox-details" id="lightbox-details">
+        <div class="lightbox-details-inner">
+          <span class="lightbox-category-tag" id="lightbox-category">Category</span>
+          <h2 class="lightbox-title" id="lightbox-title">Image Title</h2>
+          <p class="lightbox-caption" id="lightbox-caption">Image description / caption</p>
+          <div class="lightbox-meta" id="lightbox-meta"></div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
